@@ -13,7 +13,9 @@ app.use(express.json());
 app.use('/uploads', express.static('backend/uploads'));
 app.use(express.urlencoded({ extended: true }));
 
+app.use('/api/inquire', require('./routes/inquiryRoutes'));
 app.use('/api/packages', require('./routes/packageRoutes'));
+app.use('/api/users', require('./routes/userRoutes'));
 
 app.use(errorHandler);
 app.listen(port, () => console.log(`Server running on port ${port}`));

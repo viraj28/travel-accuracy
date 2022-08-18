@@ -31,16 +31,30 @@ const {
   setPackage,
   deletePackage,
 } = require('../controllers/packageController');
+const { grantAccess } = require('../middleware/accessMiddleware');
+
+const { protect } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
 router
   .route('/')
-  .get(getpackage)
-  .post(upload.single('packageImage'), setPackage);
+  .get(protect, grantAccess('readAny', 'package'), getpackage)
+  .post(
+    protect,
+    grantAccess('createOwn', 'package'),
+    upload.array('packageImages', 5),
+    setPackage
+  );
+
 router
   .route('/:id')
-  .put(upload.single('packageImage'), updatePackage)
-  .delete(deletePackage);
+  .put(
+    protect,
+    grantAccess('updateOwn', 'package'),
+    upload.array('packageImages', 5),
+    updatePackage
+  )
+  .delete(protect, grantAccess('deleteOwn', 'package'), deletePackage);
 
 module.exports = router;

@@ -1,9 +1,10 @@
 const asyncHandler = require('express-async-handler');
 
 const Package = require('../models/packageModel');
+const User = require('../models/userModel');
 
 /***
- * @desc Get all packages
+ * @desc getPackage -- Get all packages
  * @route GET /api/packages
  * @access Private
  */
@@ -14,12 +15,12 @@ const getpackage = asyncHandler(async (req, res) => {
 });
 
 /***
- * @desc Create a new package
+ * @desc setPackage -- Create a new package
  * @route POST /api/packages
  * @access Private
  */
 const setPackage = asyncHandler(async (req, res) => {
-  console.log(req.file);
+  console.log(req.files);
   console.log(req.body);
 
   if (!req.body.title) {
@@ -33,35 +34,46 @@ const setPackage = asyncHandler(async (req, res) => {
   }
 
   const package = await Package.create({
-    packageImage: req.file.path,
+    packageImages: req.files.map((file) => file.path),
     title: req.body.title,
     description: req.body.description,
+    user: req.user.id,
   });
 
   res.status(200).json(package);
 });
 
 /***
- * @desc Update a package
+ * @desc updatePackage -- Update a package
  * @route PUT /api/packages/:id
  * @access Private
  */
 const updatePackage = asyncHandler(async (req, res) => {
   let package;
+  let ownPackage;
   if (req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
     package = await Package.findById(req.params.id);
+    if (package) {
+      ownPackage = package.user == req.user.id;
+    }
   }
 
   if (!package) {
     res.status(400);
     throw new Error('Package not found');
-    process.exit(1);
+  }
+
+  if (!ownPackage && req.user.role !== 'admin') {
+    res.status(401);
+    throw new Error('Not your package, no permission ');
   }
 
   const updatedPackage = await Package.findByIdAndUpdate(
     req.params.id,
     {
-      packageImage: req.file.path,
+      packageImages: req.files
+        ? req.files.map((file) => file.path)
+        : package.packageImages,
       ...req.body,
     },
     { new: true }
@@ -77,19 +89,27 @@ const updatePackage = asyncHandler(async (req, res) => {
  */
 const deletePackage = asyncHandler(async (req, res) => {
   let package;
+  let ownPackage;
   if (req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
     package = await Package.findById(req.params.id);
+    if (package) {
+      ownPackage = package.user == req.user.id;
+    }
   }
 
   if (!package) {
     res.status(400);
     throw new Error('Package not found');
-    process.exit(1);
+  }
+
+  if (!ownPackage && req.user.role !== 'admin') {
+    res.status(401);
+    throw new Error('Not your package, no permission ');
   }
 
   let id = package.id;
   await package.remove();
-  res.status(200).json(id);
+  res.status(200).json({ id });
 });
 
 module.exports = {
