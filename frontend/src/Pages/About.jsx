@@ -1,6 +1,6 @@
 import React from 'react';
 import web2 from '../images/Travel_plans.svg';
-import Common from './Common';
+import Common from '../components/Common';
 
 function About() {
   return (

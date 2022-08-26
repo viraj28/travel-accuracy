@@ -1,6 +1,6 @@
 import React from 'react';
 import web from '../images/Travel plans_Flatline.svg';
-import Common from './Common';
+import Common from '../components/Common';
 import Service from './Service';
 import Contact from './Contact';
 

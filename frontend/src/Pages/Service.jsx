@@ -1,11 +1,11 @@
 import React from 'react';
-import Sdata from './Sdata';
-import Card from './Card';
+import Sdata from '../components/Sdata';
+import Card from '../components/Card';
 
 const Service = () => {
   return (
     <>
-      <section class="section" id="service">
+      <section className="section" id="service">
         <div className="my-5">
           <h1 className="text-center ">Our Services</h1>
         </div>

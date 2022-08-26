@@ -1,7 +1,20 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { toast } from 'react-toastify';
+import { NavLink, useLocation } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
-function Navbar() {
+const Navbar = () => {
+  const { dispatch } = useContext(AuthContext);
+  const user = localStorage.getItem('user');
+  var location = useLocation();
+  location = location.pathname.split('/')[1];
+
+  const handleLogOut = async (e) => {
+    console.log(user);
+    localStorage.removeItem('user');
+    dispatch({ type: 'LOGIN_START' });
+    toast.info('Logged Out!');
+  };
   return (
     <>
       <div className="container-fluid nav_bg">
@@ -71,28 +84,44 @@ function Navbar() {
                     </li>
                   </ul>
                   <ul className="navbar-nav ml-auto mb-2 mb-lg-0">
-                    <li className="nav-item">
-                      <NavLink
-                        className={({ isActive }) => {
-                          return isActive
-                            ? 'nav-link menu_active'
-                            : 'nav-link login-link';
-                        }}
-                        to=" "
-                      >
-                        Login
-                      </NavLink>
-                    </li>
-                    <li className="nav-item">
-                      <NavLink
-                        className={({ isActive }) => {
-                          return isActive ? 'nav-link menu_active' : 'nav-link';
-                        }}
-                        to=" "
-                      >
-                        Register
-                      </NavLink>
-                    </li>
+                    {!user && (
+                      <li className="nav-item login-item">
+                        {location === 'login' && (
+                          <NavLink
+                            className={({ isActive }) => {
+                              return isActive
+                                ? 'nav-link menu_active'
+                                : 'btn btn-primary';
+                            }}
+                            to="/register"
+                          >
+                            Register
+                          </NavLink>
+                        )}
+                        {location !== 'login' && (
+                          <NavLink
+                            className={({ isActive }) => {
+                              return isActive
+                                ? 'nav-link menu_active'
+                                : 'btn btn-primary';
+                            }}
+                            to="/login"
+                          >
+                            Login
+                          </NavLink>
+                        )}
+                      </li>
+                    )}
+                    {user && (
+                      <li>
+                        <button
+                          className="btn btn-danger"
+                          onClick={handleLogOut}
+                        >
+                          Log out
+                        </button>
+                      </li>
+                    )}
                   </ul>
                 </div>
               </div>
@@ -102,6 +131,6 @@ function Navbar() {
       </div>
     </>
   );
-}
+};
 
 export default Navbar;

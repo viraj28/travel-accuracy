@@ -30,9 +30,9 @@ font-weight: bold !important;
   color: #3498db !important;
 }
 
-.login-link{
-  border-right: 1px solid #565387 !important;
-}
+
+
+
 
 @media (max-width:991px){
   .navbar-brand{
@@ -99,7 +99,7 @@ font-weight: bold !important;
   margin-right: 0;
 }
 
-#header .animated{
+#header .animated, .animated{
   animation: up-down 2s ease-in-out infinite alternate-reverse both;
 }
 
@@ -134,6 +134,21 @@ font-weight: bold !important;
 .section{
   min-height:75vh;
 }
+
+/* *****************************
+    Login Section
+*****************************/
+.login-img{
+  width: 200px;
+  text-align: center;
+  align-items: center;
+}
+
+.formContents{
+  max-width: 380px !important;
+}
+
+
 
 /*****************************
     Footer Section

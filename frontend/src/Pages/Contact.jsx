@@ -27,7 +27,7 @@ function Contact() {
 
   return (
     <>
-      <section class="section" id="contact">
+      <section className="section" id="contact">
         <div className="my-5">
           <h1 className="text-center">Contact Us</h1>
         </div>
@@ -35,13 +35,13 @@ function Contact() {
           <div className="row">
             <div className="col-md-6 col-10 mx-auto">
               <form onSubmit={formSubmit}>
-                <div class="mb-3">
-                  <label for="fullNameInput" class="form-label">
+                <div className="mb-3">
+                  <label htmlFor="fullNameInput" className="form-label">
                     Full Name
                   </label>
                   <input
                     type="text"
-                    class="form-control"
+                    className="form-control"
                     id="fullNameInput"
                     name="fullName"
                     value={data.fullName}
@@ -50,13 +50,13 @@ function Contact() {
                   />
                 </div>
 
-                <div class="mb-3">
-                  <label for="phoneInput" class="form-label">
+                <div className="mb-3">
+                  <label htmlFor="phoneInput" className="form-label">
                     Phone Number
                   </label>
                   <input
                     type="number"
-                    class="form-control"
+                    className="form-control"
                     id="phoneInput"
                     name="phone"
                     value={data.phone}
@@ -64,13 +64,13 @@ function Contact() {
                     placeholder="Enter your phone number"
                   />
                 </div>
-                <div class="mb-3">
-                  <label for="emailInput" class="form-label">
+                <div className="mb-3">
+                  <label htmlFor="emailInput" className="form-label">
                     Email address
                   </label>
                   <input
                     type="email"
-                    class="form-control"
+                    className="form-control"
                     id="emailInput"
                     name="email"
                     value={data.email}
@@ -78,12 +78,12 @@ function Contact() {
                     placeholder="name@example.com"
                   />
                 </div>
-                <div class="mb-3">
-                  <label for="messageInput" class="form-label">
+                <div className="mb-3">
+                  <label htmlFor="messageInput" className="form-label">
                     Message
                   </label>
                   <textarea
-                    class="form-control"
+                    className="form-control"
                     id="messageInput"
                     rows="3"
                     name="msg"
@@ -91,8 +91,8 @@ function Contact() {
                     onChange={InputEventHandler}
                   ></textarea>
                 </div>
-                <div class="col-12">
-                  <button class="btn btn-outline-primary" type="submit">
+                <div className="col-12">
+                  <button className="btn btn-outline-primary" type="submit">
                     Submit form
                   </button>
                 </div>
