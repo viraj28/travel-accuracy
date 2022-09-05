@@ -1,7 +1,7 @@
 const Card = ({ imgsrc, title, desc }) => {
   return (
     <>
-      <div className="col-md-4 col-10 mx-auto">
+      <div className="col-md-4 col-10 mx-auto gy-4">
         <div className="card">
           <img src={imgsrc} className="card-img-top" alt={imgsrc} />
           <div className="card-body">

@@ -12,7 +12,7 @@ const Navbar = () => {
   const handleLogOut = async (e) => {
     console.log(user);
     localStorage.removeItem('user');
-    dispatch({ type: 'LOGIN_START' });
+    await dispatch({ type: 'LOGIN_START' });
     toast.info('Logged Out!');
   };
   return (
@@ -41,17 +41,36 @@ const Navbar = () => {
                   id="navbarSupportedContent"
                 >
                   <ul className="navbar-nav m-auto mb-2 mb-lg-0">
-                    <li className="nav-item">
-                      <NavLink
-                        className={({ isActive }) => {
-                          return isActive ? 'nav-link menu_active' : 'nav-link';
-                        }}
-                        aria-current="page"
-                        to="/"
-                      >
-                        Home
-                      </NavLink>
-                    </li>
+                    {user && (
+                      <li className="nav-item">
+                        <NavLink
+                          className={({ isActive }) => {
+                            return isActive
+                              ? 'nav-link menu_active'
+                              : 'nav-link';
+                          }}
+                          aria-current="page"
+                          to="/dashboard"
+                        >
+                          Dashboard
+                        </NavLink>
+                      </li>
+                    )}
+                    {!user && (
+                      <li className="nav-item">
+                        <NavLink
+                          className={({ isActive }) => {
+                            return isActive
+                              ? 'nav-link menu_active'
+                              : 'nav-link';
+                          }}
+                          aria-current="page"
+                          to="/"
+                        >
+                          Home
+                        </NavLink>
+                      </li>
+                    )}
                     <li className="nav-item">
                       <NavLink
                         className={({ isActive }) => {

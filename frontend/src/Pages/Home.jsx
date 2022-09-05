@@ -8,7 +8,7 @@ function Home() {
   return (
     <>
       <Common
-        name="Grow your business with"
+        name="One stop for Travel Agents"
         imgsrc={web}
         visit="/service"
         btname="Explore now"

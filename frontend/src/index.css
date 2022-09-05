@@ -148,6 +148,60 @@ font-weight: bold !important;
   max-width: 380px !important;
 }
 
+/******************************
+    Dashboard 
+******************************/
+
+.sidebar {
+  margin: 0;
+  padding: 0;
+  width: 200px;
+  background-color: #fff;
+  position: fixed;
+  height: 70vh;
+  overflow: auto;
+
+}
+
+.sidebar a {
+  display: block;
+  color: black;
+  padding: 16px;
+  text-decoration: none;
+  
+}
+ 
+.sidebar a.active {
+  background-color: #eee;
+  color: black;
+}
+
+.sidebar a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+
+.content{
+  margin-left:200px;
+  padding: 1px 16px;;
+}
+
+@media screen and (max-width: 700px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  .sidebar a {float: left;}
+  div.content {margin-left: 0;}
+}
+
+@media screen and (max-width: 400px) {
+  .sidebar a {
+    text-align: center;
+    float: none;
+  }
+}
 
 
 /*****************************

@@ -7,8 +7,7 @@ const Footer = () => {
         <div className="container text-center">
           <p>
             Copyright &copy; {new Date().getFullYear()} Travel Guardian. All
-            rights reserved | This Website is made with{' '}
-            <span className="text-danger">&hearts;</span>"
+            rights reserved | This Website is made with &hearts;
           </p>
         </div>
       </footer>

@@ -57,7 +57,7 @@ const Login = () => {
     await delay(2000);
     if (localStorage.getItem('user')) {
       //TODO: Navigate to dashboard Page
-      return navigate('/', { replace: true });
+      return navigate('/dashboard', { replace: true });
     }
   };
 
