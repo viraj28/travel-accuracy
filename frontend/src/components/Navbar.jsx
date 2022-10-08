@@ -23,7 +23,7 @@ const Navbar = () => {
             <nav className="navbar navbar-expand-lg navbar-light">
               <div className="container-fluid">
                 <NavLink className="navbar-brand" to=" ">
-                  Travel Guardian
+                  Travel Accuracy
                 </NavLink>
                 <button
                   className="navbar-toggler"

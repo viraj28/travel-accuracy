@@ -34,7 +34,7 @@ const createInquiry = asyncHandler(async (req, res) => {
     phone: req.body.phone,
   });
 
-  res.status(200).json(inquiry);
+  res.status(200).json({ data: inquiry, message: 'Inquiry submitted!' });
 });
 
 /***

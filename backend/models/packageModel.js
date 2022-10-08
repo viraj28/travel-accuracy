@@ -16,6 +16,14 @@ const packageSchema = mongoose.Schema(
       type: String,
       required: [true, 'Please add a description'],
     },
+    duration: {
+      type: String,
+      required: [true, 'Please add duration'],
+    },
+    price: {
+      type: Number,
+      required: [true, 'Please add a Price for the Package'],
+    },
   },
   {
     timestamps: true,

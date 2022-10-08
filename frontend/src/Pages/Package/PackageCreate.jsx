@@ -13,6 +13,8 @@ const PackageCreate = () => {
   const [data, setData] = useState({
     title: '',
     description: '',
+    duration: '',
+    price: '',
     packageImages: [],
   });
 
@@ -33,6 +35,22 @@ const PackageCreate = () => {
       required: true,
       autoComplete: 'off',
     },
+    {
+      id: 'durationInput',
+      name: 'duration',
+      label: 'Duration',
+      type: 'text',
+      required: true,
+      autoComplete: 'off',
+    },
+    {
+      id: 'priceInput',
+      name: 'price',
+      label: 'Price',
+      type: 'Number',
+      required: true,
+      autoComplete: 'off',
+    },
   ];
 
   const InputEventHandler = (e) => {
@@ -50,25 +68,6 @@ const PackageCreate = () => {
     const uploaded = [];
     let limitExceeded = false;
 
-    // files.some((file) => {
-    //   console.log(file);
-    //   if (uploaded.findIndex((f) => f.name === file.name) === -1) {
-    //     uploaded.push(file);
-    //     if (uploaded.length === MAX_COUNT || uploaded.length < MAX_COUNT) {
-    //       setFileLimit(true);
-    //       console.log('FileLimit', fileLimit);
-    //     }
-
-    //     if (uploaded.length > MAX_COUNT) {
-    //       toast.info(`You can add only maximum of ${MAX_COUNT} files`);
-    //       setFileLimit(false);
-    //       limitExceeded = true;
-    //       return true;
-    //     }
-    //   }
-    //   return true;
-    // });
-    // console.log(uploaded.length);
     files.map((file) => {
       // console.log(file);
       if (uploaded.length > MAX_COUNT) {
@@ -87,7 +86,6 @@ const PackageCreate = () => {
       }
       return true;
     });
-    // console.log('uploadedArray', uploaded);
     //Update the state.
     if (!limitExceeded) {
       setData((preVal) => {
@@ -107,21 +105,8 @@ const PackageCreate = () => {
 
   const { user } = useContext(AuthContext);
 
-  const formSubmit = (e) => {
+  const formSubmit = async (e) => {
     e.preventDefault();
-    // const config = {
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data',
-    //     Authorization: `Bearer ${user.token}`,
-    //   },
-    // };
-    // const formData = new FormData();
-    // formData.append('title', data.title);
-    // formData.append('description', data.description);
-    // data.packageImages.forEach((img) => {
-    //   formData.append('packageImages', img);
-    // });
-    // addPackage(formData, config);
 
     const config = {
       headers: {
@@ -131,10 +116,17 @@ const PackageCreate = () => {
     const formData = new FormData();
     formData.append('title', data.title);
     formData.append('description', data.description);
+    formData.append('duration', data.duration);
+    formData.append('price', data.price);
     data.packageImages.forEach((img) => {
       formData.append('packageImages', img);
     });
-    addPackage(formData, config);
+    await addPackage(formData, config);
+    setData({
+      title: '',
+      description: '',
+      packageImages: '',
+    });
   };
 
   useEffect(() => {});

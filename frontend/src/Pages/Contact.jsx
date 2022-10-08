@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import emailjs from '@emailjs/browser';
+import axios from 'axios';
 
 function Contact() {
   const [data, setData] = useState({
@@ -18,11 +20,35 @@ function Contact() {
     });
   };
 
-  const formSubmit = (e) => {
+  const formSubmit = async (e) => {
     e.preventDefault();
-    alert(
-      `My name is ${data.fullName}. My phone number is ${data.phone}. My email is ${data.email}. My message is ${data.msg}`
-    );
+    var templateParams = data;
+    if (!data.fullName || !data.phone || !data.email || !data.msg) return;
+    try {
+      const res = await axios.get('/mail');
+      console.log(res);
+      emailjs.init(res.data.user_id);
+      await emailjs
+        .send(res.data.service_id, res.data.template_id, templateParams)
+        .then(
+          function (response) {
+            alert('Message Sent!');
+            console.log('SUCCESS!', response.status, response.text);
+            setData({
+              fullName: '',
+              phone: '',
+              email: '',
+              msg: '',
+            });
+          },
+          function (error) {
+            alert('Unable to send at the moment...');
+            console.log('FAILED...', error);
+          }
+        );
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -47,6 +73,7 @@ function Contact() {
                     value={data.fullName}
                     onChange={InputEventHandler}
                     placeholder="Enter your name"
+                    required
                   />
                 </div>
 
@@ -62,6 +89,7 @@ function Contact() {
                     value={data.phone}
                     onChange={InputEventHandler}
                     placeholder="Enter your phone number"
+                    required
                   />
                 </div>
                 <div className="mb-3">
@@ -76,6 +104,7 @@ function Contact() {
                     value={data.email}
                     onChange={InputEventHandler}
                     placeholder="name@example.com"
+                    required
                   />
                 </div>
                 <div className="mb-3">
@@ -89,6 +118,7 @@ function Contact() {
                     name="msg"
                     value={data.msg}
                     onChange={InputEventHandler}
+                    required
                   ></textarea>
                 </div>
                 <div className="col-12">

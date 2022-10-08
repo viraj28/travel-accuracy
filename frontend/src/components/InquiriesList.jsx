@@ -1,20 +1,18 @@
 import axios from 'axios';
-import React, { useEffect, useContext, useState } from 'react';
+import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faPenToSquare,
-  faTrashCan,
-  faPlusSquare,
-} from '@fortawesome/free-regular-svg-icons';
+import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
-import { deletePackage } from '../apiCalls';
+import { useEffect } from 'react';
+import { useContext } from 'react';
+import { useState } from 'react';
+
+import { deleteInquiry } from '../apiCalls';
 import { AuthContext } from '../context/AuthContext';
 
-const PackageList = () => {
-  const navigate = useNavigate();
+const InquiriesList = () => {
+  const [inquiries, setInquiries] = useState([]);
   const [packages, setPackages] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
   const { user } = useContext(AuthContext);
 
@@ -27,27 +25,22 @@ const PackageList = () => {
       };
 
       try {
-        setLoading(true);
+        const res3 = await axios.get('/inquire/all', config);
         const res = await axios.get('/packages', config);
         const res2 = await axios.get('/users/all', config);
         const data = res.data;
         const usersData = res2.data;
+        const inquireData = res3.data;
+        console.log(data);
+        setInquiries(inquireData.data);
         setPackages(data);
         setUsers(usersData.data);
-        setLoading(false);
       } catch (error) {
         console.log(error);
       }
     }
     fetchPackages();
   }, [user]);
-  const handleAdd = () => {
-    navigate('/package/add');
-  };
-
-  const handleEdit = (id) => {
-    navigate(`/package/edit/${id}`);
-  };
 
   const handleDelete = async (id) => {
     if (window.confirm(`Sure to delete?`)) {
@@ -57,24 +50,28 @@ const PackageList = () => {
         },
       };
 
-      let packagesAfterDelete = packages.filter((pack) => pack._id !== id);
+      let inquiriesAfterDelete = inquiries.filter((inq) => inq._id !== id);
 
-      setPackages(packagesAfterDelete);
+      setInquiries(inquiriesAfterDelete);
 
-      await deletePackage(id, config);
+      await deleteInquiry(id, config);
     } else {
       console.log('no dlete');
     }
   };
 
-  if (loading) {
-    return <h2>loading...</h2>;
-  }
+  const getPackageTitle = (id) => {
+    let pack = packages.find((o) => o._id === id);
+    if (pack !== undefined) {
+      return pack.title;
+    } else return '[Deleted]';
+  };
+
   return (
     <>
       <div className="col-10 offset-1">
         <div className="row">
-          <h5 className="col-sm-6">Package list</h5>
+          <h5 className="col-sm-6">Inquiries list</h5>
           <div className="col-sm-6">
             <div className="input-group">
               <input
@@ -100,60 +97,41 @@ const PackageList = () => {
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Title</th>
-              <th scope="col">Description</th>
-              <th scope="col">Created By</th>
+              <th scope="col">Inquiry</th>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Phone </th>
+              <th scope="col">Package </th>
               <th scope="col">Date </th>
-              <th colSpan={2} scope="col">
-                <FontAwesomeIcon
-                  className="ms-4"
-                  style={{ cursor: 'pointer' }}
-                  icon={faPlusSquare}
-                  size="2xl"
-                  onClick={handleAdd}
-                />
-              </th>
             </tr>
           </thead>
           <tbody>
-            {packages.map((pack, ind) => {
+            {inquiries.map((inq, ind) => {
               return (
                 <>
-                  <tr key={pack._id + 0}>
-                    <th key={pack._id} scope="row">
+                  <tr key={inq._id + 0}>
+                    <th key={inq._id + 'a'} scope="row">
                       {ind + 1}
                     </th>
-                    <td
-                      key={pack._id + 1}
-                      onClick={() => navigate(`/package/single/${pack._id}`)}
-                    >
-                      {pack.title}
+                    <td key={inq._id + 1}>{inq.text}</td>
+                    <td key={inq._id + 2}>
+                      {users.find((o) => o._id === inq.user).name}
                     </td>
-                    <td key={pack._id + 2}>
-                      {pack.description.substring(0, 20)}...
+                    <td key={inq._id + 3}>
+                      {users.find((o) => o._id === inq.user).email}
                     </td>
-                    <td key={pack._id + 3}>
-                      {users.find((o) => o._id === pack.user).name}
+                    <td key={inq._id + 6}>{inq.phone}</td>
+                    <td key={inq._id + 5}>{getPackageTitle(inq.package)}</td>
+                    <td key={inq._id + 4}>
+                      {new Date(inq.createdAt).toDateString()}
                     </td>
-                    <td key={pack._id + 4}>
-                      {new Date(pack.createdAt).toDateString()}
-                    </td>
-                    {/* <td key={pack._id + 5}>
+
+                    <td key={inq._id + 7}>
                       <button
-                        key={pack._id + 6}
-                        className="btn btn-success"
-                        onClick={() => handleEdit(pack._id)}
-                        name={pack._id}
-                      >
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                      </button>
-                    </td> */}
-                    <td key={pack._id + 7}>
-                      <button
-                        key={pack._id + 8}
+                        key={inq._id + 8}
                         className="btn btn-danger"
-                        onClick={() => handleDelete(pack._id)}
-                        name={pack._id}
+                        onClick={() => handleDelete(inq._id)}
+                        name={inq._id}
                       >
                         <FontAwesomeIcon icon={faTrashCan} />
                       </button>
@@ -169,4 +147,4 @@ const PackageList = () => {
   );
 };
 
-export default PackageList;
+export default InquiriesList;

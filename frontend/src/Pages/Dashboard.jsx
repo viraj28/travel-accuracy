@@ -3,33 +3,44 @@ import { useEffect, useState } from 'react';
 import { useContext } from 'react';
 
 import Card from '../components/Card';
+import InquiriesList from '../components/InquiriesList';
+import PackageGrid from '../components/PackageGrid';
 import PackageList from '../components/PackageList';
 
 import SideBar from '../components/SideBar';
+import UsersList from '../components/UsersList';
 import { AuthContext } from '../context/AuthContext';
 
 const Dashboard = () => {
-  const [packages, setPackages] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [showPackages, setShowPackages] = useState(true);
+  const [showInquiries, setShowInquiries] = useState(false);
+  const [showUsers, setShowUsers] = useState(false);
+
+  const handlePackagesClick = () => {
+    setShowPackages(true);
+    setShowInquiries(false);
+    setShowUsers(false);
+  };
+  const handleInquiriesClick = () => {
+    setShowPackages(false);
+    setShowInquiries(true);
+    setShowUsers(false);
+  };
+  const handleUsersClick = () => {
+    setShowPackages(false);
+    setShowInquiries(false);
+    setShowUsers(true);
+  };
   const { user } = useContext(AuthContext);
-  const fetchPackages = async (user) => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    };
+
+  const getUserRole = () => {
     user.role === 'admin' ? setIsAdmin(true) : setIsAdmin(false);
-    try {
-      const res = await axios.get('/packages', config);
-      setPackages(res.data);
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   useEffect(() => {
-    fetchPackages(user);
-  }, [user]);
+    getUserRole();
+  });
 
   //   console.log(isAdmin);
   return (
@@ -37,27 +48,27 @@ const Dashboard = () => {
       <section className="section my-3 " id="dashboard">
         <div className="container">
           <div className="flex">
-            <SideBar isAdmin={isAdmin} />
+            <SideBar
+              isAdmin={isAdmin}
+              showPackages={showPackages}
+              showInquiries={showInquiries}
+              showUsers={showUsers}
+              handlePackagesClick={handlePackagesClick}
+              handleInquiriesClick={handleInquiriesClick}
+              handleUsersClick={handleUsersClick}
+            />
             <div className="content ">
               <div className="row">
                 {/* Packages visible to agents in a grid */}
-                {!isAdmin &&
-                  packages.map((val, ind) => {
-                    return (
-                      <Card
-                        key={ind}
-                        imgsrc={
-                          'http://localhost:5000' +
-                            val.packageImages[0].substring(7) ||
-                          val.packageImage
-                        }
-                        title={val.title}
-                        desc={val.description}
-                      />
-                    );
-                  })}
-                {/* Packages visible to agents in a grid*/}
-                {isAdmin && <PackageList packages={packages} />}
+                {!isAdmin && (
+                  <>
+                    <PackageGrid />
+                  </>
+                )}
+                {/* Packages visible to admins in a list*/}
+                {isAdmin && showPackages && <PackageList />}
+                {isAdmin && showInquiries && <InquiriesList />}
+                {isAdmin && showUsers && <UsersList />}
               </div>
             </div>
           </div>

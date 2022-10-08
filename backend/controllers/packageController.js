@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-
+const fs = require('fs');
 const Package = require('../models/packageModel');
 const User = require('../models/userModel');
 
@@ -32,11 +32,21 @@ const setPackage = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error('Please add description');
   }
+  if (!req.body.duration) {
+    res.status(400);
+    throw new Error('Please add duration');
+  }
+  if (!req.body.price) {
+    res.status(400);
+    throw new Error('Please add price');
+  }
 
   const package = await Package.create({
     packageImages: req.files.map((file) => file.path),
     title: req.body.title,
     description: req.body.description,
+    duration: req.body.duration,
+    price: req.body.price,
     user: req.user.id,
   });
 
@@ -108,8 +118,9 @@ const deletePackage = asyncHandler(async (req, res) => {
   }
 
   let id = package.id;
-  await package.remove();
-  res.status(200).json({ id });
+  let images = package.packageImages;
+  //await package.remove();
+  res.status(200).json({ id, images });
 });
 
 module.exports = {

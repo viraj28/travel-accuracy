@@ -20,6 +20,7 @@ const Service = () => {
                       imgsrc={val.imgsrc}
                       title={val.title}
                       desc={val.desc}
+                      isPackage={false}
                     />
                   );
                 })}

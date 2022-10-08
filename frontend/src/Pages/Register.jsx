@@ -140,7 +140,7 @@ const Register = () => {
                     <FormInput
                       key={input.id}
                       {...input}
-                      value={data[inputs.name]}
+                      value={data[input.name]}
                       onChange={InputEventHandler}
                     />
                   ))}

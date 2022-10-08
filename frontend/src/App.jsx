@@ -17,9 +17,19 @@ import { useContext } from 'react';
 import { AuthContext } from './context/AuthContext';
 import PackageEdit from './Pages/Package/PackageEdit';
 import PackageCreate from './Pages/Package/PackageCreate';
+import { useEffect } from 'react';
+import PackageDetails from './Pages/Package/PackageDetails';
 
 const App = () => {
-  const { user } = useContext(AuthContext);
+  const { user, dispatch } = useContext(AuthContext);
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem('user');
+
+    if (loggedInUser) {
+      const foundUser = JSON.parse(loggedInUser);
+      dispatch({ type: 'LOGIN_SUCCESS', payload: foundUser });
+    }
+  }, [dispatch]);
   return (
     <div className="App">
       <Navbar />
@@ -50,6 +60,10 @@ const App = () => {
               <Navigate to="/dashboard" />
             )
           }
+        />
+        <Route
+          path="/package/single/:id"
+          element={user ? <PackageDetails /> : <Navigate to="/dashboard" />}
         />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

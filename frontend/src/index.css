@@ -156,8 +156,10 @@ font-weight: bold !important;
   margin: 0;
   padding: 0;
   width: 200px;
+  display: inline-block;
+  float: left;
   background-color: #fff;
-  position: fixed;
+  
   height: 70vh;
   overflow: auto;
 
@@ -186,6 +188,20 @@ font-weight: bold !important;
   padding: 1px 16px;;
 }
 
+.hover-zoom:hover{
+  transition: 0.2s all ease-out;
+  cursor: pointer;
+  overflow: hidden;
+  transform:scale(1.05);
+
+}
+.hover-zoom:hover>img{
+  transition: 0.2s all ease-out;
+  background-size: cover;
+  transform: scale(1.10);
+  opacity: 0.8;
+}
+
 @media screen and (max-width: 700px) {
   .sidebar {
     width: 100%;
@@ -203,6 +219,29 @@ font-weight: bold !important;
   }
 }
 
+
+
+/*****************************
+   Package list
+*****************************/
+.clickButton{
+  z-index: -1;
+  
+}
+
+.backgroundGreen{
+  background-color: lightgreen !important;
+  color: white !important;
+  text-transform: uppercase;
+}
+
+.text-justify{
+  text-align: justify;
+}
+
+tr:hover{
+  cursor: pointer;
+}
 
 /*****************************
     Footer Section
