@@ -9,11 +9,14 @@ import { useState } from 'react';
 
 import { deleteInquiry } from '../apiCalls';
 import { AuthContext } from '../context/AuthContext';
+import Pagination from './Pagination';
 
 const InquiriesList = () => {
   const [inquiries, setInquiries] = useState([]);
   const [packages, setPackages] = useState([]);
   const [users, setUsers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(10);
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
@@ -67,6 +70,13 @@ const InquiriesList = () => {
     } else return '[Deleted]';
   };
 
+  //Get Current Inquiries
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentInquiries = inquiries.slice(indexOfFirstPost, indexOfLastPost);
+
+  const paginate = (number) => setCurrentPage(number);
+
   return (
     <>
       <div className="col-10 offset-1">
@@ -96,7 +106,7 @@ const InquiriesList = () => {
         <table className="table table-striped my-3">
           <thead>
             <tr>
-              <th scope="col">#</th>
+              {/* <th scope="col">#</th> */}
               <th scope="col">Inquiry</th>
               <th scope="col">Name</th>
               <th scope="col">Email</th>
@@ -106,13 +116,13 @@ const InquiriesList = () => {
             </tr>
           </thead>
           <tbody>
-            {inquiries.map((inq, ind) => {
+            {currentInquiries.map((inq, ind) => {
               return (
                 <>
                   <tr key={inq._id + 0}>
-                    <th key={inq._id + 'a'} scope="row">
+                    {/* <th key={inq._id + 'a'} scope="row">
                       {ind + 1}
-                    </th>
+                    </th> */}
                     <td key={inq._id + 1}>{inq.text}</td>
                     <td key={inq._id + 2}>
                       {users.find((o) => o._id === inq.user).name}
@@ -142,6 +152,11 @@ const InquiriesList = () => {
             })}
           </tbody>
         </table>
+        <Pagination
+          postsPerPage={postsPerPage}
+          totalPosts={packages.length}
+          paginate={paginate}
+        />
       </div>
     </>
   );

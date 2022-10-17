@@ -9,9 +9,12 @@ import { useState } from 'react';
 
 import { deleteUser } from '../apiCalls';
 import { AuthContext } from '../context/AuthContext';
+import Pagination from './Pagination';
 
 const UsersList = () => {
   const [users, setUsers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(10);
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
@@ -55,6 +58,13 @@ const UsersList = () => {
     }
   };
 
+  //Get Current Posts
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentUsers = users.slice(indexOfFirstPost, indexOfLastPost);
+
+  const paginate = (number) => setCurrentPage(number);
+
   return (
     <>
       <div className="col-10 offset-1">
@@ -84,7 +94,7 @@ const UsersList = () => {
         <table className="table table-striped my-3">
           <thead>
             <tr>
-              <th scope="col">#</th>
+              {/* <th scope="col">#</th> */}
               <th scope="col">Name</th>
               <th scope="col">Company</th>
               <th scope="col">Email</th>
@@ -93,13 +103,13 @@ const UsersList = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((usr, ind) => {
+            {currentUsers.map((usr, ind) => {
               return (
                 <>
                   <tr key={usr._id + 0}>
-                    <th key={usr._id + 'a'} scope="row">
+                    {/* <th key={usr._id + 'a'} scope="row">
                       {ind + 1}
-                    </th>
+                    </th> */}
                     <td key={usr._id + 1}>{usr.name}</td>
                     <td key={usr._id + 2}>{usr.companyName}</td>
                     <td key={usr._id + 3}>{usr.email}</td>
@@ -129,6 +139,11 @@ const UsersList = () => {
             })}
           </tbody>
         </table>
+        <Pagination
+          postsPerPage={postsPerPage}
+          totalPosts={users.length}
+          paginate={paginate}
+        />
       </div>
     </>
   );

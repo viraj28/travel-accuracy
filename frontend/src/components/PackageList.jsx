@@ -10,12 +10,15 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { deletePackage } from '../apiCalls';
 import { AuthContext } from '../context/AuthContext';
+import Pagination from './Pagination';
 
 const PackageList = () => {
   const navigate = useNavigate();
   const [packages, setPackages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(10);
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
@@ -67,6 +70,13 @@ const PackageList = () => {
     }
   };
 
+  //Get Current Posts
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPackages = packages.slice(indexOfFirstPost, indexOfLastPost);
+
+  const paginate = (number) => setCurrentPage(number);
+
   if (loading) {
     return <h2>loading...</h2>;
   }
@@ -99,7 +109,7 @@ const PackageList = () => {
         <table className="table table-striped my-3">
           <thead>
             <tr>
-              <th scope="col">#</th>
+              {/* <th scope="col">#</th> */}
               <th scope="col">Title</th>
               <th scope="col">Description</th>
               <th scope="col">Created By</th>
@@ -116,13 +126,13 @@ const PackageList = () => {
             </tr>
           </thead>
           <tbody>
-            {packages.map((pack, ind) => {
+            {currentPackages.map((pack, ind) => {
               return (
                 <>
                   <tr key={pack._id + 0}>
-                    <th key={pack._id} scope="row">
+                    {/* <th key={pack._id} scope="row">
                       {ind + 1}
-                    </th>
+                    </th> */}
                     <td
                       key={pack._id + 1}
                       onClick={() => navigate(`/package/single/${pack._id}`)}
@@ -164,6 +174,11 @@ const PackageList = () => {
             })}
           </tbody>
         </table>
+        <Pagination
+          postsPerPage={postsPerPage}
+          totalPosts={packages.length}
+          paginate={paginate}
+        />
       </div>
     </>
   );

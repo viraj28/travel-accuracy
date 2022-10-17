@@ -8,10 +8,13 @@ import { AuthContext } from '../context/AuthContext';
 
 import Card from './Card';
 import { useNavigate } from 'react-router-dom';
+import Pagination from './Pagination';
 
 const PackageGrid = () => {
   const navigate = useNavigate();
   const [packages, setPackages] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(9);
   const { user } = useContext(AuthContext);
   useEffect(() => {
     async function fetchPackages() {
@@ -37,6 +40,14 @@ const PackageGrid = () => {
   const handleCardClick = (id) => {
     navigate(`/package/single/${id}`);
   };
+
+  //Get Current Posts
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPackages = packages.slice(indexOfFirstPost, indexOfLastPost);
+
+  const paginate = (number) => setCurrentPage(number);
+
   return (
     <>
       <div className="row">
@@ -63,7 +74,7 @@ const PackageGrid = () => {
         </div>
       </div>
 
-      {packages.map((val, ind) => {
+      {currentPackages.map((val, ind) => {
         return (
           <Card
             key={ind}
@@ -80,6 +91,12 @@ const PackageGrid = () => {
           />
         );
       })}
+      <p></p>
+      <Pagination
+        postsPerPage={postsPerPage}
+        totalPosts={packages.length}
+        paginate={paginate}
+      />
     </>
   );
 };
