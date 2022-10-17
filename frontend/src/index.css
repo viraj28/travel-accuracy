@@ -242,6 +242,13 @@ font-weight: bold !important;
 tr:hover{
   cursor: pointer;
 }
+.close{
+  margin-left:90%;
+  float: right;
+}
+.close:hover{
+  cursor: pointer;
+}
 
 /*****************************
     Footer Section

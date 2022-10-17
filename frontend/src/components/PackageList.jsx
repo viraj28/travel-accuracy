@@ -6,7 +6,7 @@ import {
   faTrashCan,
   faPlusSquare,
 } from '@fortawesome/free-regular-svg-icons';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faX } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { deletePackage } from '../apiCalls';
 import { AuthContext } from '../context/AuthContext';
@@ -19,6 +19,8 @@ const PackageList = () => {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(10);
+  const [isSearching, setIsSearching] = useState(false);
+  const [input, setInput] = useState();
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
@@ -73,9 +75,26 @@ const PackageList = () => {
   //Get Current Posts
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPackages = packages.slice(indexOfFirstPost, indexOfLastPost);
-
+  let currentPackages = packages.slice(indexOfFirstPost, indexOfLastPost);
+  if (isSearching) {
+    currentPackages = packages.filter((pack) => {
+      if (pack.title.toLowerCase().includes(input.toLowerCase())) {
+        return pack;
+      }
+      return null;
+    });
+  }
+  const search = () => {
+    if (input) {
+      setIsSearching(true);
+    }
+  };
   const paginate = (number) => setCurrentPage(number);
+
+  const close = () => {
+    setIsSearching(false);
+    setInput('');
+  };
 
   if (loading) {
     return <h2>loading...</h2>;
@@ -93,12 +112,14 @@ const PackageList = () => {
                 id="search"
                 placeholder="Search..."
                 aria-describedby="inputGroupPrepend"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
                 required
               />
               <div className="input-group-prepend">
                 <span className="input-group-text">
                   {' '}
-                  <button className="btn">
+                  <button type="submit" className="btn" onClick={search}>
                     <FontAwesomeIcon icon={faSearch} />
                   </button>{' '}
                 </span>
@@ -106,6 +127,11 @@ const PackageList = () => {
             </div>
           </div>
         </div>
+        {isSearching && (
+          <div className="close">
+            <FontAwesomeIcon icon={faX} onClick={close} />
+          </div>
+        )}
         <table className="table table-striped my-3">
           <thead>
             <tr>

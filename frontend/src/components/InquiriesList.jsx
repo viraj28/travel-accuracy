@@ -2,7 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faX } from '@fortawesome/free-solid-svg-icons';
 import { useEffect } from 'react';
 import { useContext } from 'react';
 import { useState } from 'react';
@@ -17,6 +17,8 @@ const InquiriesList = () => {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(10);
+  const [isSearching, setIsSearching] = useState(false);
+  const [input, setInput] = useState();
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
@@ -73,7 +75,25 @@ const InquiriesList = () => {
   //Get Current Inquiries
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentInquiries = inquiries.slice(indexOfFirstPost, indexOfLastPost);
+  let currentInquiries = inquiries.slice(indexOfFirstPost, indexOfLastPost);
+  if (isSearching) {
+    currentInquiries = inquiries.filter((inq) => {
+      if (inq.text.toLowerCase().includes(input.toLowerCase())) {
+        return inq;
+      }
+      return null;
+    });
+  }
+  const search = () => {
+    if (input) {
+      setIsSearching(true);
+    }
+  };
+
+  const close = () => {
+    setIsSearching(false);
+    setInput('');
+  };
 
   const paginate = (number) => setCurrentPage(number);
 
@@ -90,12 +110,14 @@ const InquiriesList = () => {
                 id="search"
                 placeholder="Search..."
                 aria-describedby="inputGroupPrepend"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
                 required
               />
               <div className="input-group-prepend">
                 <span className="input-group-text">
                   {' '}
-                  <button className="btn">
+                  <button type="submit" className="btn" onClick={search}>
                     <FontAwesomeIcon icon={faSearch} />
                   </button>{' '}
                 </span>
@@ -103,6 +125,11 @@ const InquiriesList = () => {
             </div>
           </div>
         </div>
+        {isSearching && (
+          <div className="close">
+            <FontAwesomeIcon icon={faX} onClick={close} />
+          </div>
+        )}
         <table className="table table-striped my-3">
           <thead>
             <tr>
