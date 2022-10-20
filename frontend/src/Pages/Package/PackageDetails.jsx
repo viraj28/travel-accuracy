@@ -7,11 +7,13 @@ import { useParams } from 'react-router-dom';
 import InquiryForm from '../../components/InquiryForm';
 import PackageImages from '../../components/PackageImages';
 import { AuthContext } from '../../context/AuthContext';
+import displayRazorpay from '../../utils/paymentGateway';
 
 const PackageDetails = () => {
   const { id } = useParams();
 
   const { user } = useContext(AuthContext);
+  console.log(user);
   const [packag, setPackage] = useState([]);
   useEffect(() => {
     async function fetchPackages() {
@@ -33,6 +35,30 @@ const PackageDetails = () => {
     }
     fetchPackages();
   }, [id, user]);
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+    },
+  };
+
+  const loadScript = (src) => {
+    return new Promise((resolve) => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+  };
+
+  useEffect(() => {
+    loadScript('https://checkout.razorpay.com/v1/checkout.js');
+  });
 
   return (
     <>
@@ -69,7 +95,18 @@ const PackageDetails = () => {
                   </p>
                 </div>
                 <div className=" h6 col-md-8">
-                  <button className="btn btn-primary">Buy Now!</button>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() =>
+                      displayRazorpay(config, packag._id, {
+                        name: user.name,
+                        email: user.email,
+                        contact: user.phone,
+                      })
+                    }
+                  >
+                    Buy Now!
+                  </button>
                 </div>
               </div>
             </div>

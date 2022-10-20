@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const fs = require('fs');
+const DIR = './backend/uploads';
 const Package = require('../models/packageModel');
 const User = require('../models/userModel');
 

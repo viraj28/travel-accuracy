@@ -30,6 +30,7 @@ const App = () => {
       dispatch({ type: 'LOGIN_SUCCESS', payload: foundUser });
     }
   }, [dispatch]);
+
   return (
     <div className="App">
       <Navbar />
