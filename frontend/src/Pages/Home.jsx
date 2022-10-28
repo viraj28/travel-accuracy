@@ -5,6 +5,7 @@ import Service from './Service';
 import Contact from './Contact';
 
 function Home() {
+  const detail = 'Filling the gap between Travel agents and suppliers.';
   return (
     <>
       <Common
@@ -12,6 +13,7 @@ function Home() {
         imgsrc={web}
         visit="/service"
         btname="Explore now"
+        detail={detail}
       />
 
       <Service />

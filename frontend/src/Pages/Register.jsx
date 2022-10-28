@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import FormInput from '../components/FormInput';
 import register from '../images/register.svg';
@@ -16,6 +16,7 @@ const Register = () => {
     role: 'agent',
     confirmPassword: '',
   });
+  const [terms, setTerms] = useState(false);
 
   const inputs = [
     {
@@ -186,10 +187,24 @@ const Register = () => {
                       </label>
                     </div>
                   </div>
+                  <p>
+                    <input
+                      type="checkbox"
+                      checked={terms}
+                      onClick={() => setTerms(!terms)}
+                      required
+                    />{' '}
+                    I have read the{' '}
+                    <Link to="/terms" target="_blank">
+                      {' '}
+                      Terms and Conditions
+                    </Link>{' '}
+                  </p>
                   {/* <!-- Submit button --> */}
                   <button
                     className="btn btn-outline-primary btn-block mb-4 "
                     type="submit"
+                    disabled={!terms}
                   >
                     Register
                   </button>

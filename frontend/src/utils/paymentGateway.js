@@ -1,4 +1,48 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
+
+const PaymentSuccessful = async (
+  config,
+  order_id,
+  razorpay_payment_id,
+  razorpay_signature,
+  amount_paid,
+  package_id,
+  user_id
+) => {
+  amount_paid /= 100;
+  let orderDetails = {
+    package_id,
+    package_cost: amount_paid,
+    user_id,
+  };
+  try {
+    const { data } = await axios.post(
+      '/razorpay/verify-payment',
+      {
+        order_id,
+        razorpay_payment_id,
+        razorpay_signature,
+        amount_paid,
+        orderDetails,
+      },
+      {
+        headers: {
+          Authorization: config.headers.Authorization,
+        },
+      }
+    );
+    if (data && data.success) {
+      toast.success(data.message);
+    } else {
+      toast.error(
+        'Payment verification has failed. Any amount deducted will be refunded shortly. Please try your payment again.'
+      );
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export default async function displayRazorpay(config, packageId, user) {
   const { data } = await axios.post(
@@ -11,8 +55,6 @@ export default async function displayRazorpay(config, packageId, user) {
     }
   );
 
-  console.log(data);
-
   const options = {
     key: process.env.RAZ_ID,
     currency: data.currency,
@@ -22,8 +64,15 @@ export default async function displayRazorpay(config, packageId, user) {
     image: 'http://localhost:5000/logo.png',
     order_id: data.id,
     handler: function (response) {
-      alert('PAYMENT ID ::' + response.razorpay_payment_id);
-      alert('ORDER ID :: ' + response.razorpay_order_id);
+      PaymentSuccessful(
+        config,
+        data.id,
+        response.razorpay_payment_id,
+        response.razorpay_signature,
+        data.amount.toString(),
+        packageId,
+        data.user.id
+      );
     },
     prefill: {
       name: data.user.name,
@@ -33,5 +82,8 @@ export default async function displayRazorpay(config, packageId, user) {
   };
 
   const paymentObject = new window.Razorpay(options);
+  paymentObject.on('payment.failed', function (response) {
+    toast.error('Payment failed. Please try again!');
+  });
   paymentObject.open();
 }

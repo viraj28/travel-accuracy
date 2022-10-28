@@ -19,6 +19,10 @@ import PackageEdit from './Pages/Package/PackageEdit';
 import PackageCreate from './Pages/Package/PackageCreate';
 import { useEffect } from 'react';
 import PackageDetails from './Pages/Package/PackageDetails';
+import Privacy from './Pages/Policies/Privacy';
+import Terms from './Pages/Policies/Terms';
+import Refund from './Pages/Policies/Refund';
+import MoreAbout from './Pages/Policies/MoreAbout';
 
 const App = () => {
   const { user, dispatch } = useContext(AuthContext);
@@ -42,6 +46,10 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={user ? <Dashboard /> : <Login />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/refund" element={<Refund />} />
+        <Route path="/more-about" element={<MoreAbout />} />
         <Route
           path="/package/add"
           element={

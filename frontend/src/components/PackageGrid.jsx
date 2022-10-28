@@ -14,7 +14,7 @@ const PackageGrid = () => {
   const navigate = useNavigate();
   const [packages, setPackages] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(3);
+  const [postsPerPage] = useState(12);
   const [isSearching, setIsSearching] = useState(false);
   const [input, setInput] = useState();
 
