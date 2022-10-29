@@ -28,7 +28,7 @@ const PackageGrid = () => {
       };
 
       try {
-        const res = await axios.get('/packages', config);
+        const res = await axios.get('/api/packages', config);
 
         const data = res.data;
 

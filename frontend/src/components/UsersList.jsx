@@ -28,7 +28,7 @@ const UsersList = () => {
       };
 
       try {
-        const res2 = await axios.get('/users/all', config);
+        const res2 = await axios.get('/api/users/all', config);
 
         const usersData = res2.data;
 

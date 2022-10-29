@@ -30,9 +30,9 @@ const InquiriesList = () => {
       };
 
       try {
-        const res3 = await axios.get('/inquire/all', config);
-        const res = await axios.get('/packages', config);
-        const res2 = await axios.get('/users/all', config);
+        const res3 = await axios.get('/api/inquire/all', config);
+        const res = await axios.get('/api/packages', config);
+        const res2 = await axios.get('/api/users/all', config);
         const data = res.data;
         const usersData = res2.data;
         const inquireData = res3.data;

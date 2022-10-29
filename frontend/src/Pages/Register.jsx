@@ -103,7 +103,7 @@ const Register = () => {
     const { name, companyName, phone, email, password, role } = dataToPass;
 
     try {
-      const res = await axios.post('/users/', {
+      const res = await axios.post('/api/users/', {
         name,
         companyName,
         phone,

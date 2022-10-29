@@ -18,7 +18,7 @@ const PaymentSuccessful = async (
   };
   try {
     const { data } = await axios.post(
-      '/razorpay/verify-payment',
+      '/api/razorpay/verify-payment',
       {
         order_id,
         razorpay_payment_id,
@@ -46,7 +46,7 @@ const PaymentSuccessful = async (
 
 export default async function displayRazorpay(config, packageId, user) {
   const { data } = await axios.post(
-    '/razorpay/create-order',
+    '/api/razorpay/create-order',
     { packageId: packageId },
     {
       headers: {

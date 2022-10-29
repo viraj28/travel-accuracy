@@ -25,7 +25,7 @@ function Contact() {
     var templateParams = data;
     if (!data.fullName || !data.phone || !data.email || !data.msg) return;
     try {
-      const res = await axios.get('/mail');
+      const res = await axios.get('/api/mail');
       console.log(res);
       emailjs.init(res.data.user_id);
       await emailjs

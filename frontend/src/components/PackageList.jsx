@@ -33,8 +33,8 @@ const PackageList = () => {
 
       try {
         setLoading(true);
-        const res = await axios.get('/packages', config);
-        const res2 = await axios.get('/users/all', config);
+        const res = await axios.get('/api/packages', config);
+        const res2 = await axios.get('/api/users/all', config);
         const data = res.data;
         const usersData = res2.data;
         setPackages(data);

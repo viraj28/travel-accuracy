@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 export const loginCall = async (userCredential, dispatch) => {
   dispatch({ type: 'LOGIN_START' });
   try {
-    const res = await axios.post('/users/login', userCredential);
+    const res = await axios.post('/api/users/login', userCredential);
     dispatch({ type: 'LOGIN_SUCCESS', payload: res.data });
     localStorage.setItem('user', JSON.stringify(res.data));
 
@@ -19,7 +19,7 @@ export const loginCall = async (userCredential, dispatch) => {
 
 export const addPackage = async (data, config) => {
   try {
-    const res = await axios.post('/packages', data, {
+    const res = await axios.post('/api/packages', data, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: config.headers.Authorization,
@@ -35,7 +35,7 @@ export const addPackage = async (data, config) => {
 
 export const deletePackage = async (id, config) => {
   try {
-    const res = await axios.delete(`/packages/${id}`, {
+    const res = await axios.delete(`/api/packages/${id}`, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: config.headers.Authorization,
@@ -66,7 +66,7 @@ export const deleteUser = async (id, config) => {
 
 export const createOTP = async (data, config) => {
   try {
-    const res = await axios.post('/otp/generate', data, {
+    const res = await axios.post('/api/otp/generate', data, {
       headers: {
         Authorization: config.headers.Authorization,
       },
@@ -84,7 +84,7 @@ export const createOTP = async (data, config) => {
 
 export const verifyOTP = async (data, config) => {
   try {
-    const res = await axios.post('/otp/verify', data, {
+    const res = await axios.post('/api/otp/verify', data, {
       headers: {
         Authorization: config.headers.Authorization,
       },
@@ -102,7 +102,7 @@ export const verifyOTP = async (data, config) => {
 
 export const createInquiry = async (data, id, config) => {
   try {
-    const res = await axios.post(`/inquire/${id}`, data, {
+    const res = await axios.post(`/api/inquire/${id}`, data, {
       headers: {
         Authorization: config.headers.Authorization,
       },
