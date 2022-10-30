@@ -61,7 +61,7 @@ export default async function displayRazorpay(config, packageId, user) {
     amount: data.amount,
     name: 'Travel Accuracy Package',
     description: 'Wallet Transaction',
-    image: 'http://localhost:5000/logo.png',
+    image: 'http://localhost:5000/logo',
     order_id: data.id,
     handler: function (response) {
       PaymentSuccessful(
