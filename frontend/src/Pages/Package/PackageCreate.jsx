@@ -126,6 +126,8 @@ const PackageCreate = () => {
       title: '',
       description: '',
       packageImages: '',
+      price: '',
+      duration: '',
     });
   };
 

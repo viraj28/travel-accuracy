@@ -13,7 +13,7 @@ const PackageDetails = () => {
   const { id } = useParams();
 
   const { user } = useContext(AuthContext);
-  console.log(user);
+  // console.log(user);
   const [packag, setPackage] = useState([]);
   useEffect(() => {
     async function fetchPackages() {

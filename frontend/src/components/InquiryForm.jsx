@@ -8,7 +8,7 @@ import FormInput from './FormInput';
 
 const InquiryForm = () => {
   const { id } = useParams();
-  console.log(id);
+
   const [displayGetOtp, setDisplayGetOtp] = useState(true);
   const [showOtpField, setShowOtpField] = useState(false);
   const [validOtp, setValidOtp] = useState(false);

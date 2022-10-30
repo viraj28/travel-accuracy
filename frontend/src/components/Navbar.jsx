@@ -10,7 +10,7 @@ const Navbar = () => {
   location = location.pathname.split('/')[1];
 
   const handleLogOut = async (e) => {
-    console.log(user);
+    // console.log(user);
     localStorage.removeItem('user');
     await dispatch({ type: 'LOGIN_START' });
     toast.info('Logged Out!');
