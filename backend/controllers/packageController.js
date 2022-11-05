@@ -1,6 +1,5 @@
 const asyncHandler = require('express-async-handler');
 const fs = require('fs');
-const DIR = './backend/uploads';
 const Package = require('../models/packageModel');
 const User = require('../models/userModel');
 
@@ -10,9 +9,9 @@ const User = require('../models/userModel');
  * @access Private
  */
 const getpackage = asyncHandler(async (req, res) => {
-  const packages = await Package.find();
+    const packages = await Package.find();
 
-  res.status(200).json(packages);
+    res.status(200).json(packages);
 });
 
 /***
@@ -21,37 +20,56 @@ const getpackage = asyncHandler(async (req, res) => {
  * @access Private
  */
 const setPackage = asyncHandler(async (req, res) => {
-  console.log(req.files);
-  console.log(req.body);
+    console.log(req.files);
+    console.log(req.body);
 
-  if (!req.body.title) {
-    res.status(400);
-    throw new Error('Please add title');
-  }
+    if (!req.body.title) {
+        res.status(400);
+        throw new Error('Please add title');
+    }
 
-  if (!req.body.description) {
-    res.status(400);
-    throw new Error('Please add description');
-  }
-  if (!req.body.duration) {
-    res.status(400);
-    throw new Error('Please add duration');
-  }
-  if (!req.body.price) {
-    res.status(400);
-    throw new Error('Please add price');
-  }
+    if (!req.body.description) {
+        res.status(400);
+        throw new Error('Please add description');
+    }
+    if (!req.body.duration) {
+        res.status(400);
+        throw new Error('Please add duration');
+    }
+    if (!req.body.price) {
+        res.status(400);
+        throw new Error('Please add price');
+    }
 
-  const package = await Package.create({
-    packageImages: req.files.map((file) => file.path),
-    title: req.body.title,
-    description: req.body.description,
-    duration: req.body.duration,
-    price: req.body.price,
-    user: req.user.id,
-  });
+    if (!req.files) {
+        res.status(400);
+        throw new Error('Please add some images!');
+    }
 
-  res.status(200).json(package);
+    packageImages = req.files;
+    let fileName, contentType, imgBuffer, imgBase64;
+    packageImages = packageImages.map((img) => {
+        filename = img.filename;
+        contentType = img.mimetype;
+        imgBuffer = fs.readFileSync(img.path);
+        imgBase64 = imgBuffer.toString('base64');
+        return {
+            filename,
+            contentType,
+            imgBase64,
+        };
+    });
+
+    const package = await Package.create({
+        packageImages: packageImages,
+        title: req.body.title,
+        description: req.body.description,
+        duration: req.body.duration,
+        price: req.body.price,
+        user: req.user.id,
+    });
+
+    res.status(200).json(package);
 });
 
 /***
@@ -60,37 +78,37 @@ const setPackage = asyncHandler(async (req, res) => {
  * @access Private
  */
 const updatePackage = asyncHandler(async (req, res) => {
-  let package;
-  let ownPackage;
-  if (req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
-    package = await Package.findById(req.params.id);
-    if (package) {
-      ownPackage = package.user == req.user.id;
+    let package;
+    let ownPackage;
+    if (req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
+        package = await Package.findById(req.params.id);
+        if (package) {
+            ownPackage = package.user == req.user.id;
+        }
     }
-  }
 
-  if (!package) {
-    res.status(400);
-    throw new Error('Package not found');
-  }
+    if (!package) {
+        res.status(400);
+        throw new Error('Package not found');
+    }
 
-  if (!ownPackage && req.user.role !== 'admin') {
-    res.status(401);
-    throw new Error('Not your package, no permission ');
-  }
+    if (!ownPackage && req.user.role !== 'admin') {
+        res.status(401);
+        throw new Error('Not your package, no permission ');
+    }
 
-  const updatedPackage = await Package.findByIdAndUpdate(
-    req.params.id,
-    {
-      packageImages: req.files
-        ? req.files.map((file) => file.path)
-        : package.packageImages,
-      ...req.body,
-    },
-    { new: true }
-  );
+    const updatedPackage = await Package.findByIdAndUpdate(
+        req.params.id,
+        {
+            packageImages: req.files
+                ? req.files.map((file) => file.path)
+                : package.packageImages,
+            ...req.body,
+        },
+        { new: true }
+    );
 
-  res.status(200).json(updatedPackage);
+    res.status(200).json(updatedPackage);
 });
 
 /***
@@ -99,34 +117,34 @@ const updatePackage = asyncHandler(async (req, res) => {
  * @access Private
  */
 const deletePackage = asyncHandler(async (req, res) => {
-  let package;
-  let ownPackage;
-  if (req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
-    package = await Package.findById(req.params.id);
-    if (package) {
-      ownPackage = package.user == req.user.id;
+    let package;
+    let ownPackage;
+    if (req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
+        package = await Package.findById(req.params.id);
+        if (package) {
+            ownPackage = package.user == req.user.id;
+        }
     }
-  }
 
-  if (!package) {
-    res.status(400);
-    throw new Error('Package not found');
-  }
+    if (!package) {
+        res.status(400);
+        throw new Error('Package not found');
+    }
 
-  if (!ownPackage && req.user.role !== 'admin') {
-    res.status(401);
-    throw new Error('Not your package, no permission ');
-  }
+    if (!ownPackage && req.user.role !== 'admin') {
+        res.status(401);
+        throw new Error('Not your package, no permission ');
+    }
 
-  let id = package.id;
-  let images = package.packageImages;
-  //await package.remove();
-  res.status(200).json({ id, images });
+    let id = package.id;
+    let images = package.packageImages;
+    await package.remove();
+    res.status(200).json({ id, images });
 });
 
 module.exports = {
-  getpackage,
-  setPackage,
-  updatePackage,
-  deletePackage,
+    getpackage,
+    setPackage,
+    updatePackage,
+    deletePackage,
 };

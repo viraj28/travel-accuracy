@@ -27,7 +27,7 @@ app.use('/api/otp', require('./routes/otpRoutes'));
 app.use('/api/mail', require('./routes/mailRoutes'));
 app.use('/api/razorpay', require('./routes/paymentRoutes'));
 
-// Serve frontend
+//Serve frontend
 // if (process.env.NODE_ENV === 'production') {
 //   app.use(express.static(path.join(__dirname, '../frontend/build')));
 
