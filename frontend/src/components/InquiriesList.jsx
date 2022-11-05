@@ -39,7 +39,7 @@ const InquiriesList = () => {
                 const data = res.data;
                 const usersData = res2.data;
                 const inquireData = res3.data;
-                console.log(data);
+                // console.log(data);
                 setInquiries(inquireData.data);
                 setPackages(data);
                 setUsers(usersData.data);

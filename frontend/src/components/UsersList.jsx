@@ -35,7 +35,7 @@ const UsersList = () => {
 
                 const usersData = res2.data;
 
-                console.log(usersData);
+                // console.log(usersData);
 
                 setUsers(usersData.data);
                 setIsLoading(false);
