@@ -33,9 +33,9 @@ const PackageGrid = () => {
                 setIsLoading(true);
                 const res = await axios.get('/api/packages', config);
 
-                const data = res.data;
+                const data = await res.data;
                 console.log(data);
-                setPackages(data);
+                await setPackages(data);
                 setIsLoading(false);
             } catch (error) {
                 console.log(error);
