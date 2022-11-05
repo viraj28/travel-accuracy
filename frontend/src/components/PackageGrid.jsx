@@ -34,7 +34,7 @@ const PackageGrid = () => {
                 const res = await axios.get('/api/packages', config);
 
                 const data = res.data;
-
+                console.log(data);
                 setPackages(data);
                 setIsLoading(false);
             } catch (error) {
@@ -120,8 +120,9 @@ const PackageGrid = () => {
                     <Card
                         key={ind}
                         imgsrc={
+                            val.packageImages !== null &&
                             `data:${val.packageImages[0]?.contentType};base64,` +
-                            val.packageImages[0]?.imgBase64
+                                val.packageImages[0]?.imgBase64
                         }
                         title={val.title}
                         desc={val.description}
