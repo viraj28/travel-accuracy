@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const fs = require('fs');
+const path = require('path');
 const Package = require('../models/packageModel');
 const User = require('../models/userModel');
 
@@ -20,8 +21,8 @@ const getpackage = asyncHandler(async (req, res) => {
  * @access Private
  */
 const setPackage = asyncHandler(async (req, res) => {
-    console.log(req.files);
-    console.log(req.body);
+    // console.log(req.files);
+    // console.log(req.body);
 
     if (!req.body.title) {
         res.status(400);
@@ -67,6 +68,11 @@ const setPackage = asyncHandler(async (req, res) => {
         duration: req.body.duration,
         price: req.body.price,
         user: req.user.id,
+    });
+
+    req.files.map((img) => {
+        fs.unlinkSync(path.join(__dirname, '..', '..', img.path));
+        return;
     });
 
     res.status(200).json(package);
