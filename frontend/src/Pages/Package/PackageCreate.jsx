@@ -86,7 +86,7 @@ const PackageCreate = () => {
                     uploaded.length < MAX_COUNT
                 ) {
                     setFileLimit(true);
-                    console.log('FileLimit', fileLimit);
+                    // console.log('FileLimit', fileLimit);
                 }
 
                 uploaded.push(file);
@@ -138,8 +138,6 @@ const PackageCreate = () => {
         });
         navigate('/dashboard');
     };
-
-    useEffect(() => {});
 
     return (
         <>
