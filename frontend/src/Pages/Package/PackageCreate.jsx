@@ -136,6 +136,7 @@ const PackageCreate = () => {
             price: '',
             duration: '',
         });
+        navigate('/dashboard');
     };
 
     useEffect(() => {});
